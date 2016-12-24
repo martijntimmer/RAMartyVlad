@@ -1,4 +1,4 @@
-# version 120
+#version 120
 /*
  * Implementation of fragment shading in GLSL
  * Questions: Dark edges around the light circles - better seen with multiple light sources

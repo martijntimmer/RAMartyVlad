@@ -17,7 +17,7 @@ public class ShaderPrograms {
     public static ShaderProgram terrainShader;
     
     public static void setupShaders(GL2 gl, GLU glu) {
-        phongShader =  new ShaderProgram(gl, glu, "shaderPrograms/Phong/vertex.glsl", null, "shaderPrograms/Phong/fragment.glsl");
+        phongShader =  new ShaderProgram(gl, glu, "shaderPrograms/Default/vertex.glsl", null, "shaderPrograms/Default/fragment.glsl");
         defaultShader = new ShaderProgram(gl, glu, "shaderPrograms/Default/vertex.glsl", null, "shaderPrograms/Default/fragment.glsl");
         defaultShader.setUniform(gl, "n", 30);
         robotShader = new ShaderProgram(gl, glu, "shaderPrograms/Robot/vertex.glsl", null, "shaderPrograms/Robot/fragment.glsl");

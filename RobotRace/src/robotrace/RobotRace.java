@@ -220,7 +220,7 @@ public class RobotRace extends Base {
         }
         
         // Draw the (first) robot.
-        //gl.glUseProgram(robotShader.getProgramID());
+        gl.glUseProgram(defaultShader.getProgramID());
         robots[0].draw(gl, glu, glut, (float)(System.currentTimeMillis()%1000.0/1000.0));
         
         /*

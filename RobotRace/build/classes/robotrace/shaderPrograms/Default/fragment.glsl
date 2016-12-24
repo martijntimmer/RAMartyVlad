@@ -26,8 +26,7 @@ vec3 L = normalize(Lnew.xyz/Lnew.w - P); // compute direction of light
 	float diffIntensity = max(dot(N, L), 0); // compute dffuse intensity
     if (diffuse) { result += (diffIntensity*mat.diffuse*light.diffuse); }  // compute and add diffuse contribution
 vec3 V = normalize(-P); // direction towards viewer
-float specularIntensity = 0;
-//if (dot(N, L) >= -0.1) 
+float specularIntensity = 0;//if (dot(N, L) >= -0.1) 
 specularIntensity = pow(max(dot(N, normalize(V+L)),0),200); // compute specular intensity
 //specularIntensity = pow(max(dot(N, normalize(V+L)),0),n);
 //if (specular) { result += specularIntensity * light.specular * mat.specular; } // compute and add specular contribution

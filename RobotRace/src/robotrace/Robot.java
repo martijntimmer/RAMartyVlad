@@ -9,9 +9,30 @@ import static javax.media.opengl.GL2.*;
 * Represents a Robot, to be implemented according to the Assignments.
 */
 class Robot {
+    // parameters
+    float modelScale = 0.4f; // scales whole model (ensures that the feet touch the ground)
+    float animSpeed = 1; // animation speed in Hz
+    int maxTailSegAmnt = 5; // the amount of segments the raptor's tail consists of
+    float speedDelta = 0.001f; // the maximum amount a raptor's speed-factor can change per second
+    float minSpeed = 0.02f; // min speed of a raptor
+    float maxSpeed = 0.2f; // max speed of a raptor
+    float speedFactor = 0.1f; // default % of the track the robot covers in 1 second
     
+    // cosmetic variables
+    boolean onFours = false; // if true, then the raptor has bigger arms and runs on all fours
+    boolean inPhase = false; // if true, then left an right limbs are in phase (the raptors have air-time)
+    float bodyScale = 1f; // scale of the body
+    Vector color = new Vector(0,1,0); // color of robot
+    float animOffset = 0; // animation offset ranging from 0 to 1
+    
+    // references
+    RaceTrack[] raceTracks; // array of possible racetracks
+    float progress; // perecentage progress in the track
+    float prevTime; // last time the Draw() function was called
+    int laneID; // ID of the lane this robot is on (0 for lane 1, 1 for lane 2, etc.)
+    
+    // misc
     GlobalState gs;             // provides sliders for easier debugging
-    int maxTailSegAmnt = 5;     // the amount of segments the raptor's tail consists of
     
     /** The position of the robot. */
     public Vector position = new Vector(0, 0, 0);
@@ -24,39 +45,44 @@ class Robot {
     /**
      * Constructs the robot with initial parameters.
      */
-    public Robot(Material material, GlobalState gs, float speedFactor, RaceTrack[] raceTracks) {
+    public Robot(Material material, GlobalState gs, RaceTrack[] raceTracks, int laneID) {
         this.speedFactor = speedFactor;
         this.raceTracks = raceTracks;
+        this.laneID = laneID;
         progress = 0; // start race at start
         this.material = material;
-            this.gs = gs;
+        this.gs = gs;
+        animOffset = (float)(Math.random());
+        randomInitializer();
     }
     
-    float modelScale = 0.7f; // scales whole model (ensures that the feet touch the ground)
-    float animSpeed = 1; // animation speed in Hz
-    boolean onFours = false; // if true, then the raptor has bigger arms and runs on all fours
-    boolean inPhase = false; // if true, then left an right limbs are in phase (the raptors have air-time)
-    float headScale = 1f; // scale of the head-size. Bobble-heads look funny. A maximum size of 1.5 is advised.
-    
-    RaceTrack[] raceTracks; // array of possible racetracks
-    float speedFactor = 0.1f; // how much % of the track the robot covers in 1 second
-    float progress; // perecentage progress in the track
-    float prevTime;
+    // initializes variables of raptor randomly for amore interesting race
+    private void randomInitializer () {        
+        onFours = Math.random() > 0.5; // if true, then the raptor has bigger arms and runs on all fours
+        inPhase = Math.random() > 0.5; // if true, then left an right limbs are in phase (the raptors have air-time)
+        bodyScale = (float)(0.75 + 0.5*Math.random()); // scale of the head-size. Bobble-heads look funny. A maximum size of 1.5 is advised.
+        modelScale = modelScale*bodyScale;
+        color = new Vector(Math.random(),Math.random(),Math.random()); // color of robot
+    }
     
     /**
      * Draws this robot-raptor. The anchor-point is assumed to be on the ground below the raptor.
      */
     public void draw(GL2 gl, GLU glu, GLUT glut, float time) {
-        gl.glColor3d(0, 1 ,0);
-        Vector pos = raceTracks[gs.trackNr].getLanePoint(GL_ONE, progress);
-        Vector tan = raceTracks[gs.trackNr].getLaneTangent(GL_ONE, progress);
+        gl.glColor3d(color.x, color.y, color.z);
+        Vector pos = raceTracks[gs.trackNr].getLanePoint(laneID, progress);
+        Vector tan = raceTracks[gs.trackNr].getLaneTangent(laneID, progress);
         float rot = (float)(Math.atan2(tan.y,tan.x)/Math.PI*180-90);
-        progress += ((time-prevTime)*speedFactor)%1.0f;
+        float dt = (time-prevTime);
+        progress += (dt*speedFactor)%1.0f;
+        speedFactor += dt*((Math.random()-0.5)*2*speedDelta);
+        if (speedFactor < minSpeed) speedFactor = minSpeed;
+        else if (speedFactor > maxSpeed) speedFactor = maxSpeed;
         prevTime = time;
         gl.glPushMatrix();
         gl.glTranslated(pos.x, pos.y, pos.z); // position robot on track
         gl.glRotated(rot,0,0,1); // align robot with track
-        drawBody(gl, glu, glut, (float)((time%1.0f)*animSpeed));
+        drawBody(gl, glu, glut, (float)(((time+animOffset)%1.0f)*animSpeed));
         gl.glPopMatrix();
     }
     
@@ -162,7 +188,6 @@ class Robot {
         gl.glPushMatrix();
         gl.glRotated(10 - tAnim*10,0,1,0);
         gl.glScaled(2,1.3,1.3);
-        gl.glScaled(headScale, headScale, headScale);
         gl.glTranslated(0.5,0,0);
         glut.glutSolidCube(1);
         gl.glPopMatrix();

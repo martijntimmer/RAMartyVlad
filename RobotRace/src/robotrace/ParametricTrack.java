@@ -22,11 +22,13 @@ public class ParametricTrack extends RaceTrack {
 
     }
     
-    // WIP
+    // WIP  lane ID's range from 0 to NUM_LANES-1
     @Override
     public Vector getLanePoint(int lane, double t){
-
-        return getPoint(t);
+          Vector tangent = getTangent(t);
+          Vector normal = new Vector(tangent.y, -tangent.x, 0);
+          Vector offset = normal.scale(LANE_WIDTH*(lane - (NUM_LANES-1)/2));
+        return getPoint(t).add(offset);
 
     }
     

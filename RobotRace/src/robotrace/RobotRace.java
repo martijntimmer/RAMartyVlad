@@ -102,22 +102,22 @@ public class RobotRace extends Base {
         robots = new Robot[4];
         
         // Initialize robot 0
-        robots[0] = new Robot(Material.GOLD,gs,0.1f,raceTracks
+        robots[0] = new Robot(Material.GOLD,gs,raceTracks,0
                 
         );
         
         // Initialize robot 1
-        robots[1] = new Robot(Material.SILVER,gs,0.1f,raceTracks
+        robots[1] = new Robot(Material.SILVER,gs,raceTracks,1
               
         );
         
         // Initialize robot 2
-        robots[2] = new Robot(Material.WOOD,gs,0.1f,raceTracks
+        robots[2] = new Robot(Material.WOOD,gs,raceTracks,2
               
         );
 
         // Initialize robot 3
-        robots[3] = new Robot(Material.ORANGE,gs,0.1f,raceTracks
+        robots[3] = new Robot(Material.ORANGE,gs,raceTracks,3
                 
         );
         
@@ -227,7 +227,9 @@ public class RobotRace extends Base {
         
         // Draw the (first) robot.
         gl.glUseProgram(defaultShader.getProgramID());
-        robots[0].draw(gl, glu, glut, (float)((System.currentTimeMillis()-startTime)/1000.0));
+        for (int i = 0; i < 4; i++) {
+        robots[i].draw(gl, glu, glut, (float)((System.currentTimeMillis()-startTime)/1000.0));
+        }
         //robots[0].draw(gl, glu, glut, (float)((gs.sliderA-startTime)*1000.0/1000.0));
         
         /*

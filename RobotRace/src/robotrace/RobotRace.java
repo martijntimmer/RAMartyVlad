@@ -71,38 +71,18 @@ public class RobotRace extends Base {
     
     /** Instance of the terrain. */
     private final Terrain terrain;
+    
+    private final double startTime;
         
     /**
      * Constructs this robot race by initializing robots,
      * camera, track, and terrain.
      */
     public RobotRace() {
-        
-        // Create a new array of four robots
-        robots = new Robot[4];
-        
-        // Initialize robot 0
-        robots[0] = new Robot(Material.GOLD,gs
-                
-        );
-        
-        // Initialize robot 1
-        robots[1] = new Robot(Material.SILVER,gs
-              
-        );
-        
-        // Initialize robot 2
-        robots[2] = new Robot(Material.WOOD,gs
-              
-        );
-
-        // Initialize robot 3
-        robots[3] = new Robot(Material.ORANGE,gs
-                
-        );
-        
-        // Initialize the camera
-        camera = new Camera();
+        // determine starting time of program
+        // used to determine how long the race is running
+        startTime = System.currentTimeMillis();
+        //startTime = 0;
         
         // Initialize the race tracks
         raceTracks = new RaceTrack[2];
@@ -117,6 +97,32 @@ public class RobotRace extends Base {
             new Vector[] {}
        
         );
+        
+        // Create a new array of four robots
+        robots = new Robot[4];
+        
+        // Initialize robot 0
+        robots[0] = new Robot(Material.GOLD,gs,0.1f,raceTracks
+                
+        );
+        
+        // Initialize robot 1
+        robots[1] = new Robot(Material.SILVER,gs,0.1f,raceTracks
+              
+        );
+        
+        // Initialize robot 2
+        robots[2] = new Robot(Material.WOOD,gs,0.1f,raceTracks
+              
+        );
+
+        // Initialize robot 3
+        robots[3] = new Robot(Material.ORANGE,gs,0.1f,raceTracks
+                
+        );
+        
+        // Initialize the camera
+        camera = new Camera();
         
         // Initialize the terrain
         terrain = new Terrain();
@@ -221,7 +227,8 @@ public class RobotRace extends Base {
         
         // Draw the (first) robot.
         gl.glUseProgram(defaultShader.getProgramID());
-        robots[0].draw(gl, glu, glut, (float)(System.currentTimeMillis()%1000.0/1000.0));
+        robots[0].draw(gl, glu, glut, (float)((System.currentTimeMillis()-startTime)/1000.0));
+        //robots[0].draw(gl, glu, glut, (float)((gs.sliderA-startTime)*1000.0/1000.0));
         
         /*
         gl.glUseProgram(defaultShader.getProgramID());
@@ -236,7 +243,7 @@ public class RobotRace extends Base {
         robots[3].draw(gl, glu, glut, (float)(System.currentTimeMillis()%1000.0/1000.0));
         gl.glPopMatrix();*/
         // Draw the race track.
-        gl.glUseProgram(trackShader.getProgramID());
+        gl.glUseProgram(defaultShader.getProgramID());
         raceTracks[gs.trackNr].draw(gl, glu, glut);
         
         

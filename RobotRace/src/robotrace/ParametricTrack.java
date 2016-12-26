@@ -15,9 +15,25 @@ public class ParametricTrack extends RaceTrack {
     final double LANE_WIDTH = 1.22; //Width of lane
     final int NUM_LANES = 4;        //Number of lanes
     final int NUM_VERT = 20;        //Number of quads used to draw the track
+    
     @Override
     protected Vector getPoint(double t) {        
         return new Vector(WIDTH*Math.cos(2*Math.PI*t), HEIGHT*Math.sin(2*Math.PI*t), 1);
+
+    }
+    
+    // WIP
+    @Override
+    public Vector getLanePoint(int lane, double t){
+
+        return getPoint(t);
+
+    }
+    
+    // WIP
+    public Vector getLaneTangent(int lane, double t){
+        
+        return getTangent(t);
 
     }
 

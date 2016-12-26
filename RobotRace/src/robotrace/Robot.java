@@ -24,7 +24,10 @@ class Robot {
     /**
      * Constructs the robot with initial parameters.
      */
-    public Robot(Material material, GlobalState gs) {
+    public Robot(Material material, GlobalState gs, float speedFactor, RaceTrack[] raceTracks) {
+        this.speedFactor = speedFactor;
+        this.raceTracks = raceTracks;
+        progress = 0; // start race at start
         this.material = material;
             this.gs = gs;
     }
@@ -35,13 +38,25 @@ class Robot {
     boolean inPhase = false; // if true, then left an right limbs are in phase (the raptors have air-time)
     float headScale = 1f; // scale of the head-size. Bobble-heads look funny. A maximum size of 1.5 is advised.
     
+    RaceTrack[] raceTracks; // array of possible racetracks
+    float speedFactor = 0.1f; // how much % of the track the robot covers in 1 second
+    float progress; // perecentage progress in the track
+    float prevTime;
+    
     /**
      * Draws this robot-raptor. The anchor-point is assumed to be on the ground below the raptor.
      */
-    public void draw(GL2 gl, GLU glu, GLUT glut, float tAnim) {
+    public void draw(GL2 gl, GLU glu, GLUT glut, float time) {
         gl.glColor3d(0, 1 ,0);
+        Vector pos = raceTracks[gs.trackNr].getLanePoint(GL_ONE, progress);
+        Vector tan = raceTracks[gs.trackNr].getLaneTangent(GL_ONE, progress);
+        float rot = (float)(Math.atan2(tan.y,tan.x)/Math.PI*180-90);
+        progress += ((time-prevTime)*speedFactor)%1.0f;
+        prevTime = time;
         gl.glPushMatrix();
-        drawBody(gl, glu, glut, tAnim*animSpeed);
+        gl.glTranslated(pos.x, pos.y, pos.z); // position robot on track
+        gl.glRotated(rot,0,0,1); // align robot with track
+        drawBody(gl, glu, glut, (float)((time%1.0f)*animSpeed));
         gl.glPopMatrix();
     }
     

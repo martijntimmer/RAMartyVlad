@@ -5,6 +5,10 @@
  */
 package robotrace;
 
+import com.jogamp.opengl.util.gl2.GLUT;
+import javax.media.opengl.GL2;
+import javax.media.opengl.glu.GLU;
+
 /**
  *
  * @author Vladimir
@@ -34,4 +38,25 @@ public class util {
         }
         return v;
     }
+    
+    // draws plane of dimensions xDim x yDim with xP points in the x direction, and yP points in the y direction
+    static public void drawPlane(double xDim, double yDim, int xP, int yP, GL2 gl, GLU glu, GLUT glut) {      
+        double dx = xDim/(double)xP;
+        double dy = yDim/(double)yP;
+        gl.glBegin(gl.GL_TRIANGLES);
+        for(double x = -0.5*xDim; x < 0.5*xDim-0.5*dx; x+=dx) {
+            gl.glNormal3f(0,0,1);
+            for(double y = -0.5*yDim; y < 0.5*yDim-0.5*dy; y+=dy) {
+                // first triangle of quad
+                gl.glVertex3d(x, y, 0);
+                gl.glVertex3d(x, y+dy, 0);
+                gl.glVertex3d(x+dx,y,0);
+                // second triangle of quad
+                gl.glVertex3d(x, y+dy, 0);
+                gl.glVertex3d(x+dx, y+dy, 0);
+                gl.glVertex3d(x+dx,y,0);
+            }   
+        }
+        gl.glEnd();
+    }  
 }

@@ -67,17 +67,20 @@ public class ParametricTrack extends RaceTrack {
         Vector pointOuter = point.add(normal.scale(halfTrackWidth));
         
         switch (drawingObject) {       
-            case 0:     //Draws the top of the track               
+            case 0:     //Draws the top of the track
+                gl.glNormal3f(0,0,1);
                 gl.glVertex3d(pointInner.x, pointInner.y, pointInner.z);
                 gl.glVertex3d(pointOuter.x, pointOuter.y, pointOuter.z);
                 gl.glColor3d(0.8, 0.4, 1);
                 break;        
             case 1:     //Draws the outer walls of the track
+                gl.glNormal3f((float)normal.x,(float)normal.y,(float)normal.z);
                 gl.glVertex3d(pointOuter.x, pointOuter.y, pointOuter.z);
                 gl.glVertex3d(pointOuter.x, pointOuter.y, pointOuter.z - 2);
                 gl.glColor3d(1, 0.2, 0.6);
                 break;       
             case 2:     //Draws the innter walls of the track
+                gl.glNormal3f((float)-normal.x,(float)-normal.y,(float)-normal.z);
                 gl.glVertex3d(pointInner.x, pointInner.y, pointInner.z);
                 gl.glVertex3d(pointInner.x, pointInner.y, pointInner.z - 2);
                 gl.glColor3d(0, 1, 1);

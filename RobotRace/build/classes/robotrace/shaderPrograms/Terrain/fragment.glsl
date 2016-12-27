@@ -11,9 +11,8 @@ bool specular = true;
 uniform float n;
 int lightAmnt = 1;
 uniform sampler2D texture;
-
-varying vec3 N;
 varying vec3 P;
+varying vec3 p;
 
 // compute contribution of each kind of lighting
 vec4 shading(vec3 P, vec3 N, gl_LightSourceParameters light, gl_MaterialParameters mat) {
@@ -41,17 +40,15 @@ void main() {	gl_FragColor = gl_Color;
    	vec4 color = gl_Color;
 	vec4 res = vec4(0, 0, 0, 1); // default color is opaque black
 
-/*        
-// bumpmapping
-        float nx = 0.18*sin(0.3*res.x+0.2*res.y) + 0.4*sin(res.x-0.5*res.y);
-        float ny = 0.12*sin(0.3*res.x+0.2*res.y) - 0.2*sin(res.x-0.5*res.y);
-        vec3 n = normalize(vec3(nx,ny,1));
-        n = gl_NormalMatrix*n;
-*/
+        
+        // bumpmapping
+        float nx = 0.18*sin(0.3*p.x+0.2*p.y) + 0.4*sin(p.x-0.5*p.y);
+        float ny = 0.12*sin(0.3*p.x+0.2*p.y) - 0.2*sin(p.x-0.5*p.y);
+        vec3 norm = vec3(nx,ny,1);
 
-
+        norm = normalize(gl_NormalMatrix*norm);
 	for (int i = 0; i < lightAmnt; i++) {
-		res += shading(P, N, gl_LightSource[i], mat);
+		res += shading(P, norm, gl_LightSource[i], mat);
 	}
 	gl_FragColor = res*color;
 } 

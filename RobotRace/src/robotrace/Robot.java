@@ -30,6 +30,7 @@ class Robot {
     float progress; // perecentage progress in the track
     float prevTime; // last time the Draw() function was called
     int laneID; // ID of the lane this robot is on (0 for lane 1, 1 for lane 2, etc.)
+    float lastTAnim; // the last time that was used for the drawing of the animation
     
     // misc
     GlobalState gs;             // provides sliders for easier debugging

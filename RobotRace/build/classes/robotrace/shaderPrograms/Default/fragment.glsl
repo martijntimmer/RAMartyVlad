@@ -44,4 +44,5 @@ void main() {	gl_FragColor = gl_Color;
 		res += shading(P, N, gl_LightSource[i], mat);
 	}
 	gl_FragColor = res*color;
+        //gl_FragColor = vec4(0.4,0.3,1,1);
 } 

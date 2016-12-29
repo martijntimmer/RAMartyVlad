@@ -14,7 +14,7 @@ import javax.media.opengl.glu.GLU;
  * @author Vladimir
  */
 public class util {
-    
+    public static GlobalState gs;
     // rotates vector v, d degrees around the axes marked as greater than 0
     static public Vector Rotate(Vector v, float d, int x, int y, int z) {
         float r = (float)(d/180.0*Math.PI);
@@ -37,6 +37,16 @@ public class util {
             v.y = l*Math.sin(curr + r);
         }
         return v;
+    }
+    
+    public static double choose(int x, int y)
+    {
+        double denominator = 1.0, numerator = 1.0;
+        for (int i = 1; i <= y; i++) {
+            denominator *= i;
+            numerator *= (x + 1 - i);
+        }
+        return numerator / denominator;
     }
     
     // draws plane of dimensions xDim x yDim with xP points in the x direction, and yP points in the y direction

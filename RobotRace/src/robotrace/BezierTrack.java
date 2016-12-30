@@ -12,9 +12,9 @@ import javax.media.opengl.glu.GLU;
 public class BezierTrack extends RaceTrack {
     
     private Vector[] controlPoints;
-    final double LANE_WIDTH = 1; //Width of lane
-    final int NUM_LANES = 1;        //Number of lanes
-    final int NUM_VERT = 4;        //Number of quads used to draw the track
+    final double LANE_WIDTH = 1.22; //Width of lane
+    final int NUM_LANES = 4;        //Number of lanes
+    final int NUM_VERT = 201;        //Number of quads used to draw the track
     
     BezierTrack(Vector[] controlPoints) {
         this.controlPoints = controlPoints;
@@ -24,14 +24,17 @@ public class BezierTrack extends RaceTrack {
     {
         return util.choose(n, i)*Math.pow(t, i)*Math.pow(1-t,n-i);
     }
-    Vector[] points = new Vector[] { (new Vector(3,3,0)), (new Vector(5,6,0)), (new Vector(10,6,0)), (new Vector(15, 2, 0)) };
+ //   Vector[] points = new Vector[] { (new Vector(3,3,0)), (new Vector(5,6,0)), (new Vector(10,6,0)), (new Vector(15, 2, 0)) };
     @Override
     protected Vector getPoint(double t) {
-        Vector ans = Vector.O;
-       
+        Vector ans = Vector.O;       
         int n = 3;
+        int numCurves = controlPoints.length/4;  //Amount of bezier curves
+        double dt = 1.0/numCurves;                 //How much 't' per curve
+        int iCurve =  (int)(t*numCurves);        //Which bezier curve it is
+        double newT = (t % (dt))/dt;
         for(int i = 0; i <= n; i++)
-            ans = ans.add(points[i].scale(B(i,n,t)));
+            ans = ans.add(controlPoints[iCurve*4 + i].scale(B(i,n,newT)));
         return ans;
     }
 
@@ -39,10 +42,16 @@ public class BezierTrack extends RaceTrack {
     protected Vector getTangent(double t) {
         int n = 3;
         Vector ans = Vector.O;
+        
+        int numCurves = controlPoints.length/4;  //Amount of bezier curves
+        double dt = 1.0/numCurves;                 //How much 't' per curve
+        int iCurve =  (int)(t*numCurves);        //Which bezier curve it is
+        double newT = (t % (dt))/dt;
+        
         for(int i = 0; i <= n-1; i++)
         {
-            Vector Q = (points[i+1].subtract(points[i])).scale(n);
-            ans = ans.add(Q.scale(B(i,n-1,t)));
+            Vector Q = (controlPoints[iCurve*4+i+1].subtract(controlPoints[iCurve*4+i])).scale(n);
+            ans = ans.add(Q.scale(B(i,n-1,newT)));
         }
         return ans.normalized();
     }
@@ -53,7 +62,7 @@ public class BezierTrack extends RaceTrack {
         for(int i = 0; i < 3; i++)
         {
             gl.glBegin(gl.GL_QUAD_STRIP);
-            for(double t = 0; t <= 1+dt; t+=dt) //+dt because sometimes the loop is not closed :S
+            for(double t = 0; t <= 1; t+=dt) //+dt because sometimes the loop is not closed :S
             {
                 drawSegmentOfTrack(gl, t, i);
             }      

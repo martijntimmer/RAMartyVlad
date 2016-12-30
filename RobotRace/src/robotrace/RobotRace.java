@@ -105,10 +105,15 @@ public class RobotRace extends Base {
         
         // Track 2
         float g = 3.5f;
-        raceTracks[1] = new BezierTrack(
-                
-            new Vector[] {}
-       
+        float width = 10;
+        float length = 15;
+        float height = 5;
+        raceTracks[1] = new BezierTrack(                
+            new Vector[] { new Vector(0,0,1), new Vector(-width,0,1), new Vector(-width,length,1), new Vector(0, length, 1), //Lower left C
+                           new Vector(0,length,1), new Vector(width,length,1), new Vector(width,length*2,1), new Vector(0, length*2, 1), //Upper right C 
+                           new Vector(0,length*2,1), new Vector(-width,length*2,1), new Vector(-width,length,1+height), new Vector(0, length, 1+height), //Upper left C
+                           new Vector(0, length, 1+height), new Vector(width,length,1+height), new Vector(width,0,0), new Vector(0, 0, 1), //Lower right C
+            }       
         );
         
         // Create a new array of four robots
@@ -140,8 +145,7 @@ public class RobotRace extends Base {
         // Initialize the terrain
         terrain = new Terrain();
         util.gs = gs;
-    }
-    
+    } 
     /**
      * Called upon the start of the application.
      * Primarily used to configure OpenGL.

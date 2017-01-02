@@ -48,3 +48,5 @@ Temporary Items
 /RobotRace/dist/
 /RobotRace/build/
 /RobotRace/nbproject/private/
+
+*.glsl

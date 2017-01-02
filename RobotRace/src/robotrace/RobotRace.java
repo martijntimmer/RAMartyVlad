@@ -263,13 +263,13 @@ public class RobotRace extends Base {
         robots[3].draw(gl, glu, glut, (float)(System.currentTimeMillis()%1000.0/1000.0));
         gl.glPopMatrix();*/
         // Draw the race track.
-        gl.glUseProgram(defaultShader.getProgramID());
+        gl.glUseProgram(trackShader.getProgramID());
         raceTracks[gs.trackNr].draw(gl, glu, glut);
         
         
         // Draw the terrain.
         gl.glUseProgram(terrainShader.getProgramID());
-       // terrain.draw(gl, glu, glut);
+        terrain.draw(gl, glu, glut);
         reportError("terrain:");
         
         

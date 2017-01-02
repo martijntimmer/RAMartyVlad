@@ -14,7 +14,7 @@ public class ParametricTrack extends RaceTrack {
     final int HEIGHT = 14;          //Distance of center line to center line vertically
     final double LANE_WIDTH = 1.22; //Width of lane
     final int NUM_LANES = 4;        //Number of lanes
-    final int NUM_VERT = 25;        //Number of quads used to draw the track
+    final int NUM_VERT = 40;        //Number of quads used to draw the track
     
     @Override
     protected Vector getPoint(double t) {        
@@ -41,23 +41,22 @@ public class ParametricTrack extends RaceTrack {
         return tan.normalized();
     }
     
-    // WIP: Colours have strange transition when going from one drawing object to next :S 
-    // TODO: Add normals
     @Override
-    public void draw(GL2 gl, GLU glu, GLUT glut) {      
+    public void draw(GL2 gl, GLU glu, GLUT glut) {  
         double dt = 1.0/NUM_VERT;      
         for(int i = 0; i < 3; i++)
         {
+            Textures.track[i].bind(gl);
             gl.glBegin(gl.GL_QUAD_STRIP);
-            for(double t = 0; t <= 1+dt; t+=dt) //+dt because sometimes the loop is not closed :S
+            for(int j = 0; j <= NUM_VERT; j++)
             {
-                drawSegmentOfTrack(gl, t, i);
+                drawSegmentOfTrack(gl, j,j*dt, i);
             }      
             gl.glEnd();
         }      
     }  
   
-    private void drawSegmentOfTrack(GL2 gl, double t, int drawingObject) {
+     private void drawSegmentOfTrack(GL2 gl, int j, double t, int drawingObject) {
         double halfTrackWidth = NUM_LANES * LANE_WIDTH * 0.5;
         Vector tangent = getTangent(t);
         Vector normal = new Vector(tangent.y, -tangent.x, 0); 
@@ -69,21 +68,29 @@ public class ParametricTrack extends RaceTrack {
         switch (drawingObject) {       
             case 0:     //Draws the top of the track
                 gl.glNormal3f(0,0,1);
+               // gl.glColor3d(1, 0, 0);
+                gl.glTexCoord2d(0, j%2==0?0:1);                             
                 gl.glVertex3d(pointInner.x, pointInner.y, pointInner.z);
-                gl.glVertex3d(pointOuter.x, pointOuter.y, pointOuter.z);
-                gl.glColor3d(0.8, 0.4, 1);
+                gl.glTexCoord2d(1,j%2==0?0:1);
+                gl.glVertex3d(pointOuter.x, pointOuter.y, pointOuter.z);                
                 break;        
             case 1:     //Draws the outer walls of the track
                 gl.glNormal3f((float)normal.x,(float)normal.y,(float)normal.z);
+                gl.glColor3d(0, 1, 0);
+                gl.glTexCoord2d(j%2==0?0:1,0); 
                 gl.glVertex3d(pointOuter.x, pointOuter.y, pointOuter.z);
+                gl.glTexCoord2d(j%2==0?0:1,1);
                 gl.glVertex3d(pointOuter.x, pointOuter.y, pointOuter.z - 2);
-                gl.glColor3d(1, 0.2, 0.6);
+               
                 break;       
             case 2:     //Draws the innter walls of the track
                 gl.glNormal3f((float)-normal.x,(float)-normal.y,(float)-normal.z);
+                gl.glColor3d(0, 0, 1);
+                gl.glTexCoord2d(j%2==0?0:1,0); 
                 gl.glVertex3d(pointInner.x, pointInner.y, pointInner.z);
+                 gl.glTexCoord2d(j%2==0?0:1,1);
                 gl.glVertex3d(pointInner.x, pointInner.y, pointInner.z - 2);
-                gl.glColor3d(0, 1, 1);
+               
                 break;      
         }
     }

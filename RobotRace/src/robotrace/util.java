@@ -58,12 +58,18 @@ public class util {
             gl.glNormal3f(0,0,1);
             for(double y = -0.5*yDim; y < 0.5*yDim-0.5*dy; y+=dy) {
                 // first triangle of quad
+                gl.glTexCoord2d(x/xDim+0.5, y/yDim+0.5);
                 gl.glVertex3d(x, y, 0);
+                gl.glTexCoord2d(x/xDim+0.5, (y+dy)/yDim+0.5);
                 gl.glVertex3d(x, y+dy, 0);
+                gl.glTexCoord2d((x+dx)/xDim+0.5, y/yDim+0.5);
                 gl.glVertex3d(x+dx,y,0);
                 // second triangle of quad
+                gl.glTexCoord2d(x/xDim+0.5, (y+dy)/yDim+0.5);
                 gl.glVertex3d(x, y+dy, 0);
+                gl.glTexCoord2d((x+dx)/xDim+0.5, (y+dy)/yDim+0.5);
                 gl.glVertex3d(x+dx, y+dy, 0);
+                gl.glTexCoord2d((x+dx)/xDim+0.5, y/yDim+0.5);
                 gl.glVertex3d(x+dx,y,0);
             }   
         }

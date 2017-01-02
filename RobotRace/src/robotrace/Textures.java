@@ -13,8 +13,10 @@ public class Textures {
     public static Texture torso = null;
     public static Texture[] track = null;   //0=Top, 1=Outer wall, 2=Inner wall of track
     public static Texture brick = null;
+    public static Texture grass = null;
         
     public static void loadTextures() {
+        grass = loadTexture("textures/grass.jpg");
         head = loadTexture("textures/head.jpg");
         torso = loadTexture("textures/torso.jpg");       
         brick = loadTexture("textures/brick.jpg");

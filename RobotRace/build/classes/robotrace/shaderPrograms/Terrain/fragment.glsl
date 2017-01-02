@@ -38,8 +38,8 @@ if (specular) { result += specularIntensity * 1; } // compute and add specular c
 void main() {	gl_FragColor = gl_Color;
     gl_MaterialParameters mat      = gl_FrontMaterial;
 	// output of vertex shader
-	//vec4 color = texture2D(texture,gl_TexCoord[0].st);
-   	vec4 color = gl_Color;
+	vec4 color = texture2D(texture,gl_TexCoord[0].st);
+   	//vec4 color = gl_Color;
 	vec4 res = vec4(0, 0, 0, 1); // default color is opaque black
 
         // bumpmapping

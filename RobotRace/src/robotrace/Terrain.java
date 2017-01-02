@@ -20,7 +20,7 @@ class Terrain {
      */
     public void draw(GL2 gl, GLU glu, GLUT glut) {
         gl.glColor3d(0,1,0);
-        
+        Textures.grass.bind(gl);
         // terrain is 20x20, but for now scaling is applied because everything is too big in relation to the terrain :S        
         gl.glPushMatrix();
         gl.glScaled(3,3,3);

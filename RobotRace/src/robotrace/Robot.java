@@ -72,7 +72,9 @@ class Robot {
     public void draw(GL2 gl, GLU glu, GLUT glut, float time) {
         gl.glColor3d(color.x, color.y, color.z);
         Vector pos = raceTracks[gs.trackNr].getLanePoint(laneID, progress);
+        position = pos;
         Vector tan = raceTracks[gs.trackNr].getLaneTangent(laneID, progress);
+        direction = tan;
         float rot = (float)(Math.atan2(tan.y,tan.x)/Math.PI*180-90);
         float dt = (time-prevTime);
         progress += (dt*speedFactor)%1.0f;

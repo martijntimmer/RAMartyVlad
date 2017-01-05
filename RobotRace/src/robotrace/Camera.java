@@ -59,7 +59,6 @@ class Camera {
         eye = focus.position.add(focus.direction.scale(3));
         eye.z= 3;
         center = eye.add(focus.direction.scale(5));
-       
         //center.z += 2;
         up = Vector.Z;
     }

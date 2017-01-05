@@ -109,10 +109,10 @@ public class RobotRace extends Base {
         float length = 15;
         float height = 5;
         raceTracks[1] = new BezierTrack(                
-            new Vector[] { new Vector(0,0,1), new Vector(-width,0,1), new Vector(-width,length,1), new Vector(0, length, 1), //Lower left C
-                           new Vector(0,length,1), new Vector(width,length,1), new Vector(width,length*2,1), new Vector(0, length*2, 1), //Upper right C 
-                           new Vector(0,length*2,1), new Vector(-width,length*2,1), new Vector(-width,length,1+height), new Vector(0, length, 1+height), //Upper left C
-                           new Vector(0, length, 1+height), new Vector(width,length,1+height), new Vector(width,0,0), new Vector(0, 0, 1), //Lower right C
+            new Vector[] { new Vector(0,-length,1), new Vector(-width,-length,1), new Vector(-width,0,1), new Vector(0, 0, 1), //Lower left C
+                           new Vector(0,0,1), new Vector(width,0,1), new Vector(width,length,1), new Vector(0, length, 1), //Upper right C 
+                           new Vector(0,length,1), new Vector(-width,length,1), new Vector(-width,0,1+height), new Vector(0, 0, 1+height), //Upper left C
+                           new Vector(0, 0, 1+height), new Vector(width,0,1+height), new Vector(width,-length,0), new Vector(0, -length, 1), //Lower right C
             }       
         );
         
@@ -191,7 +191,7 @@ public class RobotRace extends Base {
         gl.glLoadIdentity();
 
         // Set the perspective.
-        glu.gluPerspective(45, (float)gs.w / (float)gs.h, 0.1*gs.vDist, 10*gs.vDist);
+        glu.gluPerspective(45, (float)gs.w / (float)gs.h, 0.001*gs.vDist, 10*gs.vDist);
         
         // Set camera.
         gl.glMatrixMode(GL_MODELVIEW);

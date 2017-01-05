@@ -20,18 +20,36 @@ public class BezierTrack extends RaceTrack {
         this.controlPoints = controlPoints;
     }
     
+     // WIP  lane ID's range from 0 to NUM_LANES-1
+    @Override
+    public Vector getLanePoint(int lane, double t){
+        t = t % 1.0;
+        Vector tangent = getTangent(t);
+        Vector normal = new Vector(tangent.y, -tangent.x, 0);
+        Vector offset = normal.scale(LANE_WIDTH*(lane - (NUM_LANES-1)/2));
+        return getPoint(t).add(offset);
+    }
+    
+    // WIP
+    @Override
+    public Vector getLaneTangent(int lane, double t){  
+        t = t % 1.0;
+        return getTangent(t);
+    }
+    
     private double B(int i, int n, double t)
     {
         return util.choose(n, i)*Math.pow(t, i)*Math.pow(1-t,n-i);
     }
- //   Vector[] points = new Vector[] { (new Vector(3,3,0)), (new Vector(5,6,0)), (new Vector(10,6,0)), (new Vector(15, 2, 0)) };
+
     @Override
     protected Vector getPoint(double t) {
+        t = Math.min(t, 0.99999);               //1 is technically a new curve instead of the last
         Vector ans = Vector.O;       
         int n = 3;
         int numCurves = controlPoints.length/4;  //Amount of bezier curves
         double dt = 1.0/numCurves;                 //How much 't' per curve
-        int iCurve =  (int)(t*numCurves);        //Which bezier curve it is
+        int iCurve =  Math.min((int)(t*numCurves), numCurves -1);        //Which bezier curve it is
         double newT = (t % (dt))/dt;
         for(int i = 0; i <= n; i++)
             ans = ans.add(controlPoints[iCurve*4 + i].scale(B(i,n,newT)));
@@ -40,14 +58,19 @@ public class BezierTrack extends RaceTrack {
 
     @Override
     protected Vector getTangent(double t) {
+        t = Math.min(t, 0.99999);               //1 is technically a new curve instead of the last
         int n = 3;
         Vector ans = Vector.O;
         
         int numCurves = controlPoints.length/4;  //Amount of bezier curves
         double dt = 1.0/numCurves;                 //How much 't' per curve
-        int iCurve =  (int)(t*numCurves);        //Which bezier curve it is
+        int iCurve =  Math.min((int)(t*numCurves), numCurves -1);        //Which bezier curve it is
         double newT = (t % (dt))/dt;
         
+        if(iCurve*4+2+1 > controlPoints.length)
+        {
+            int abc=123;            
+        }
         for(int i = 0; i <= n-1; i++)
         {
             Vector Q = (controlPoints[iCurve*4+i+1].subtract(controlPoints[iCurve*4+i])).scale(n);

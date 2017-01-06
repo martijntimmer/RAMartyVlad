@@ -1,20 +1,6 @@
 package robotrace;
 
-import static javax.media.opengl.GL.GL_BLEND;
-import static javax.media.opengl.GL.GL_COLOR_BUFFER_BIT;
-import static javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT;
-import static javax.media.opengl.GL.GL_DEPTH_TEST;
-import static javax.media.opengl.GL.GL_FRONT_AND_BACK;
-import static javax.media.opengl.GL.GL_LESS;
-import static javax.media.opengl.GL.GL_ONE_MINUS_SRC_ALPHA;
-import static javax.media.opengl.GL.GL_SRC_ALPHA;
 import static javax.media.opengl.GL2.*;
-import static javax.media.opengl.GL2GL3.GL_FILL;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHT0;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_NORMALIZE;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_POSITION;
-import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW;
-import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
 import static robotrace.ShaderPrograms.*;
 import static robotrace.Textures.*;
 
@@ -89,13 +75,14 @@ public class RobotRace extends Base {
     
     /** Index of last robot. */
     int lastRobot = 0;
-        
+    
     /**
      * Constructs this robot race by initializing robots,
      * camera, track, and terrain.
      */
     public RobotRace() {
-        // determine starting time of program
+     
+          // determine starting time of program
         // used to determine how long the race is running
         startTime = System.currentTimeMillis();
         //startTime = 0;
@@ -148,7 +135,8 @@ public class RobotRace extends Base {
         // Initialize the terrain
         terrain = new Terrain();
         util.gs = gs;
-    } 
+    }
+    
     /**
      * Called upon the start of the application.
      * Primarily used to configure OpenGL.
@@ -194,16 +182,14 @@ public class RobotRace extends Base {
         gl.glLoadIdentity();
 
         // Set the perspective.
-        glu.gluPerspective(45, (float)gs.w / (float)gs.h, 0.001*gs.vDist, 10*gs.vDist);
+        glu.gluPerspective(45, (float)gs.w / (float)gs.h, 0.1*gs.vDist, 10*gs.vDist);
         
         // Set camera.
         gl.glMatrixMode(GL_MODELVIEW);
         gl.glLoadIdentity();
         
-        gl.glMatrixMode(GL_PROJECTION);
         // Add light source
-        gl.glLightfv(GL_LIGHT0, GL_POSITION, new float[]{0,0,0,1f}, 0); // right,up,along front
-        gl.glMatrixMode(GL_MODELVIEW);
+        gl.glLightfv(GL_LIGHT0, GL_POSITION, new float[]{0f,0f,0f,1f}, 0);
                
         // Update the view according to the camera mode and robot of interest.
         // For camera modes 1 to 4, determine which robot to focus on.
@@ -238,14 +224,14 @@ public class RobotRace extends Base {
         
 
     // Draw hierarchy example.
-        //drawHierarchy();
+     //  drawHierarchy();
         
         // Draw the axis frame.
         if (gs.showAxes) {
             drawAxisFrame();
         }
         
-        // Draw the (first) robot.
+         // Draw the (first) robot.
         gl.glUseProgram(defaultShader.getProgramID());   
         double lowestProgress = 999999999;
         for (int i = 0; i < 4; i++) {
@@ -257,23 +243,9 @@ public class RobotRace extends Base {
             }
         }
         
-        
-        /*
-        gl.glUseProgram(defaultShader.getProgramID());
-        gl.glPushMatrix();
-        gl.glTranslated(0,-2,0);
-        robots[0].draw(gl, glu, glut, (float)(System.currentTimeMillis()%1000.0/1000.0));
-        gl.glTranslated(0,2,0);
-        robots[1].draw(gl, glu, glut, (float)(System.currentTimeMillis()%1000.0/1000.0));
-        gl.glTranslated(0,2,0);
-        robots[2].draw(gl, glu, glut, (float)(System.currentTimeMillis()%1000.0/1000.0));
-        gl.glTranslated(0,2,0);
-        robots[3].draw(gl, glu, glut, (float)(System.currentTimeMillis()%1000.0/1000.0));
-        gl.glPopMatrix();*/
         // Draw the race track.
         gl.glUseProgram(trackShader.getProgramID());
         raceTracks[gs.trackNr].draw(gl, glu, glut);
-        
         
         // Draw the terrain.
         gl.glUseProgram(terrainShader.getProgramID());
@@ -283,6 +255,7 @@ public class RobotRace extends Base {
         
     }
     
+   
     /**
      * Draws the x-axis (red), y-axis (green), z-axis (blue),
      * and origin (yellow).
@@ -318,49 +291,7 @@ public class RobotRace extends Base {
             gl.glRotated(90.0, 0, 1, 0);
             glut.glutSolidCone(0.2, 0.3, 8, 1);
         gl.glPopMatrix();
-    }
- 
-    /**
-     * Drawing hierarchy example.
-     * 
-     * This method draws an "arm" which can be animated using the sliders in the
-     * RobotRace interface. The A and B sliders rotate the different joints of
-     * the arm, while the C, D and E sliders set the R, G and B components of
-     * the color of the arm respectively. 
-     * 
-     * The way that the "arm" is drawn (by calling {@link #drawSecond()}, which 
-     * in turn calls {@link #drawThird()} imposes the following hierarchy:
-     * 
-     * {@link #drawHierarchy()} -> {@link #drawSecond()} -> {@link #drawThird()}
-     */
-    private void drawHierarchy() {
-        gl.glColor3d(gs.sliderC, gs.sliderD, gs.sliderE);
-        gl.glPushMatrix(); 
-            gl.glScaled(2, 1, 1);
-            glut.glutSolidCube(1);
-            gl.glScaled(0.5, 1, 1);
-            gl.glTranslated(1, 0, 0);
-            gl.glRotated(gs.sliderA * -90.0, 0, 1, 0);
-            drawSecond();
-        gl.glPopMatrix();
-    }
-    
-    private void drawSecond() {
-        gl.glTranslated(1, 0, 0);
-        gl.glScaled(2, 1, 1);
-        glut.glutSolidCube(1);
-        gl.glScaled(0.5, 1, 1);
-        gl.glTranslated(1, 0, 0);
-        gl.glRotated(gs.sliderB * -90.0, 0, 1, 0);
-        drawThird();
-    }
-    
-    private void drawThird() {
-        gl.glTranslated(1, 0, 0);
-        gl.glScaled(2, 1, 1);
-        glut.glutSolidCube(1);
-    }
-    
+    }  
     
     /**
      * Main program execution body, delegates to an instance of

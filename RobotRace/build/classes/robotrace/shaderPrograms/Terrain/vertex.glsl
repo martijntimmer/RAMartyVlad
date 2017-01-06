@@ -7,7 +7,7 @@ varying vec3 p;
 void main() {
      // apply height function
     vec4 res = gl_Vertex;
-    res.z = 0.6*cos(0.3*res.x+0.2*res.y) + 0.4*cos(res.x-0.5*res.y);
+    res.z = 0.6*cos(0.3*res.x+0.2*res.y) + 0.4*cos(res.x-0.5*res.y)-0.5;
     p = res.xyz/res.w;
 
     N = normalize(gl_NormalMatrix*gl_Normal); // calculate normal in modelView

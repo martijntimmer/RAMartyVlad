@@ -28,6 +28,7 @@ class Robot {
     // references
     RaceTrack[] raceTracks; // array of possible racetracks
     float progress; // perecentage progress in the track
+    int numLaps; // How many laps this robot did
     float prevTime; // last time the Draw() function was called
     int laneID; // ID of the lane this robot is on (0 for lane 1, 1 for lane 2, etc.)
     float lastTAnim; // the last time that was used for the drawing of the animation
@@ -77,7 +78,12 @@ class Robot {
         direction = tan;
         float rot = (float)(Math.atan2(tan.y,tan.x)/Math.PI*180-90);
         float dt = (time-prevTime);
-        progress += (dt*speedFactor)%1.0f;
+        progress += (dt*speedFactor);
+        if(progress>=1)
+        {
+            progress -= 1;
+            numLaps++;
+        }
         speedFactor += dt*((Math.random()-0.5)*2*speedDelta);
         if (speedFactor < minSpeed) speedFactor = minSpeed;
         else if (speedFactor > maxSpeed) speedFactor = maxSpeed;

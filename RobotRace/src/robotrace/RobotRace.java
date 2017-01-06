@@ -86,6 +86,9 @@ public class RobotRace extends Base {
     private final Terrain terrain;
     
     private final double startTime;
+    
+    /** Index of last robot. */
+    int lastRobot = 0;
         
     /**
      * Constructs this robot race by initializing robots,
@@ -204,7 +207,7 @@ public class RobotRace extends Base {
                
         // Update the view according to the camera mode and robot of interest.
         // For camera modes 1 to 4, determine which robot to focus on.
-        camera.update(gs, robots[0]);
+        camera.update(gs, robots[lastRobot]);
         glu.gluLookAt(camera.eye.x(),    camera.eye.y(),    camera.eye.z(),
                       camera.center.x(), camera.center.y(), camera.center.z(),
                       camera.up.x(),     camera.up.y(),     camera.up.z());
@@ -236,7 +239,6 @@ public class RobotRace extends Base {
 
     // Draw hierarchy example.
         //drawHierarchy();
-        drawAxisFrame();
         
         // Draw the axis frame.
         if (gs.showAxes) {
@@ -244,11 +246,17 @@ public class RobotRace extends Base {
         }
         
         // Draw the (first) robot.
-        gl.glUseProgram(defaultShader.getProgramID());
+        gl.glUseProgram(defaultShader.getProgramID());   
+        double lowestProgress = 999999999;
         for (int i = 0; i < 4; i++) {
-        robots[i].draw(gl, glu, glut, (float)((System.currentTimeMillis()-startTime)/1000.0));
+            robots[i].draw(gl, glu, glut, (float)((System.currentTimeMillis()-startTime)/1000.0));
+            if(robots[i].progress + robots[i].numLaps < lowestProgress )
+            {
+                lastRobot = i;
+                lowestProgress = robots[i].progress + robots[i].numLaps;
+            }
         }
-        //robots[0].draw(gl, glu, glut, (float)((gs.sliderA-startTime)*1000.0/1000.0));
+        
         
         /*
         gl.glUseProgram(defaultShader.getProgramID());

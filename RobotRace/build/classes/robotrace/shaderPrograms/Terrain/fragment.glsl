@@ -53,5 +53,13 @@ void main() {	gl_FragColor = gl_Color;
 		res += shading(P, norm, gl_LightSource[i], mat);
 	}
 	gl_FragColor = res*color;
+        float zl = -0.2;
+        float zh = 0.5;
+        float a = (1/(zl-zh));
+        float b = -a*zh;
+        if(p.z < zh && p.z > zl)
+            gl_FragColor = gl_FragColor + (1-gl_FragColor)*vec4(0.5,0.5,0,0)*(a*p.z+b);
+        if(p.z <= zl)
+            gl_FragColor = gl_FragColor + (1-gl_FragColor)* vec4(0,0,0.4,1);
         //gl_FragColor = vec4(0.4,0.3,1,1);
 } 

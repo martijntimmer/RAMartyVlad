@@ -10,7 +10,7 @@ import static javax.media.opengl.GL2.*;
 */
 class Robot {
     // parameters
-    float modelScale = 0.4f; // scales whole model (ensures that the feet touch the ground)
+    float modelScale = 0.3f; // scales whole model (ensures that the feet touch the ground)
     float animSpeed = 1; // animation speed in Hz
     int maxTailSegAmnt = 5; // the amount of segments the raptor's tail consists of
     float speedDelta = 0.001f; // the maximum amount a raptor's speed-factor can change per second

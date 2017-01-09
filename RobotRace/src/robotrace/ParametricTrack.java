@@ -26,7 +26,7 @@ public class ParametricTrack extends RaceTrack {
     public Vector getLanePoint(int lane, double t){
         Vector tangent = getTangent(t);
         Vector normal = new Vector(tangent.y, -tangent.x, 0);
-        Vector offset = normal.scale(LANE_WIDTH*(lane - (NUM_LANES-1)/2));
+        Vector offset = normal.scale(LANE_WIDTH*(lane - (NUM_LANES-1)/2) - 0.5f);
         return getPoint(t).add(offset);
     }
     

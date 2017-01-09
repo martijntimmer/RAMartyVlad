@@ -2,6 +2,7 @@
 // simple vertex shader
 varying vec3 P;
 varying vec3 N;
+uniform float n;
 
 void main() {
     N = normalize(gl_NormalMatrix*gl_Normal); // calculate normal in modelView

@@ -13,6 +13,8 @@ uniform sampler2D texture;
 varying vec3 N;
 varying vec3 P;
 varying vec3 p;
+varying float wf;
+varying float maxwf;
 
 // compute contribution of each kind of lighting
 vec4 shading(vec3 P, vec3 N, gl_LightSourceParameters light, gl_MaterialParameters mat) {	
@@ -52,14 +54,23 @@ norm = normalize(gl_NormalMatrix*norm);
 for (int i = 0; i < lightAmnt; i++) {
 res += shading(P, norm, gl_LightSource[i], mat);
 }
+
 gl_FragColor = res*color;
-float zl = -0.2;
-float zh = 0.5;
-float a = (1/(zl-zh));
-float b = -a*zh;
-if(p.z < zh && p.z > zl)
-gl_FragColor = gl_FragColor + (1-gl_FragColor)*vec4(0.5,0.5,0,0)*(a*p.z+b);
-if(p.z <= zl)
-gl_FragColor = gl_FragColor + (1-gl_FragColor)* vec4(0,0,0.4,1);
-//gl_FragColor = vec4(0.4,0.3,1,1);
+
+float dw = 0.5; // fade-length from sand to water
+float ds = 0.4; // fade-length from sand to grass
+if (p.z <= wf - dw) { // if below water
+    gl_FragColor = gl_FragColor + (1-gl_FragColor)* vec4(0,0,0.4,1);
+}
+else if (p.z <= wf) { // if below water but close to sand
+    float f = ((wf-p.z)/dw);
+    gl_FragColor = gl_FragColor + (1-gl_FragColor)* vec4(0,0,0.4,1)*f + (1-gl_FragColor)*vec4(0.8,0.8,0,0)*(1-f);
+}
+else if (p.z <= maxwf) { // up to max height of water is pure sand
+    gl_FragColor = gl_FragColor + (1-gl_FragColor)*vec4(0.5,0.5,0,0);
+}
+else if (p.z <= maxwf + ds) {
+    float f = ((maxwf+ds-p.z)/ds);
+    gl_FragColor = gl_FragColor + (1-gl_FragColor)*vec4(0.5,0.5,0,0)*f;
+}
 }

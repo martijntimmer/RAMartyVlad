@@ -4,6 +4,7 @@ import com.jogamp.opengl.util.gl2.GLUT;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 import static javax.media.opengl.GL2.*;
+import static robotrace.ShaderPrograms.defaultShader;
 
 /**
 * Represents a Robot, to be implemented according to the Assignments.
@@ -15,7 +16,7 @@ class Robot {
     int maxTailSegAmnt = 5; // the amount of segments the raptor's tail consists of
     float speedDelta = 0.001f; // the maximum amount a raptor's speed-factor can change per second
     float minSpeed = 0.02f; // min speed of a raptor
-    float maxSpeed = 0.2f; // max speed of a raptor
+    float maxSpeed = 0.15f; // max speed of a raptor
     float speedFactor = 0.1f; // default % of the track the robot covers in 1 second
     
     // cosmetic variables
@@ -71,6 +72,8 @@ class Robot {
      * Draws this robot-raptor. The anchor-point is assumed to be on the ground below the raptor.
      */
     public void draw(GL2 gl, GLU glu, GLUT glut, float time) {
+        
+        gl.glUseProgram(defaultShader.getProgramID());
         gl.glColor3d(color.x, color.y, color.z);
         Vector pos = raceTracks[gs.trackNr].getLanePoint(laneID, progress);
         position = pos;

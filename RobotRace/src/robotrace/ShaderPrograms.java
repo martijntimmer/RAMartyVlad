@@ -18,7 +18,6 @@ public class ShaderPrograms {
     
     public static void setupShaders(GL2 gl, GLU glu) {
         waterShader = new ShaderProgram(gl, glu, "shaderPrograms/Water/vertex.glsl", null, "shaderPrograms/Water/fragment.glsl");
-        System.out.println("hier");
         phongShader =  new ShaderProgram(gl, glu, "shaderPrograms/Default/vertex.glsl", null, "shaderPrograms/Default/fragment.glsl");
         defaultShader = new ShaderProgram(gl, glu, "shaderPrograms/Default/vertex.glsl", null, "shaderPrograms/Default/fragment.glsl");
         //defaultShader.setUniform(gl, "n", 30);

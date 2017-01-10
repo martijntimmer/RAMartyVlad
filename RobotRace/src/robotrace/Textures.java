@@ -15,8 +15,10 @@ public class Textures {
     public static Texture brick = null;
     public static Texture grass = null;
     public static Texture water = null;
+    public static Texture leaf = null;
         
     public static void loadTextures() {
+        leaf = loadTexture("textures/leaf.png");
         grass = loadTexture("textures/grass.jpg");
         head = loadTexture("textures/head.jpg");
         torso = loadTexture("textures/torso.jpg");       

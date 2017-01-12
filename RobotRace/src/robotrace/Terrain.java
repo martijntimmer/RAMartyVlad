@@ -7,6 +7,7 @@ import static robotrace.ShaderPrograms.terrainShader;
 import static robotrace.ShaderPrograms.waterShader;
 import static robotrace.ShaderPrograms.defaultShader;
 import static robotrace.ShaderPrograms.leafShader;
+import static robotrace.ShaderPrograms.skyboxShader;
 
 /**
  * Represents the terrain, to be implemented according to the Assignments.
@@ -25,6 +26,7 @@ class Terrain {
      * Draws the terrain.
      */
     public void draw(GL2 gl, GLU glu, GLUT glut) {
+        drawSkybox(gl, glu, glut);
         gl.glColor3d(0,1,0);
         // terrain is 20x20, but for now scaling is applied because everything is too big in relation to the terrain :S        
         gl.glPushMatrix();
@@ -110,13 +112,16 @@ class Terrain {
         gl.glUseProgram(leafShader.getProgramID());
         Textures.leaf.bind(gl);
         gl.glPushMatrix();
-        float dr = 360/(float)leafAmnt/2f;
+        float dr = 360/(float)leafAmnt;
         for(int i = 0; i < leafAmnt; i++) {
             // lower leaf
             gl.glRotated(dr,0,0,1);
             gl.glTranslated(2,0,0);
             util.drawPlane(4, 1.5, 8, 8, gl, glu, glut);
             gl.glTranslated(-2,0,0);
+        }
+        gl.glRotated(dr/2f,0,0,1);
+        for(int i = 0; i < leafAmnt; i++) {
             // upper leaf
             gl.glRotated(dr,0,0,1);
             gl.glRotated(-10,0,1,0);
@@ -144,4 +149,32 @@ class Terrain {
         }
         gl.glPopMatrix();
     }
+       
+   void drawSkybox (GL2 gl, GLU glu, GLUT glut) {
+       gl.glUseProgram(skyboxShader.getProgramID());
+       gl.glPushMatrix();
+       gl.glScaled(512,512,512);
+       // bottom
+       gl.glTranslated(0,0,-0.495);
+       Textures.skyBot.bind(gl);
+       util.drawPlane(1.01, 1.01, 2, 2, gl, glu, glut);
+       gl.glTranslated(0,0,0.495);
+       // sides
+       gl.glRotated(90,0,1,0);
+       for(int i = 0; i < 4; i++) {
+       gl.glTranslated(0,-0.5,0);
+       gl.glRotated(-90,1,0,0);
+       Textures.skySides[i].bind(gl);
+       util.drawPlane(1, 1, 2, 2, gl, glu, glut);
+       gl.glRotated(90,1,0,0);
+       gl.glTranslated(0,0.5,0);
+       gl.glRotated(90,1,0,0);
+       }
+       // top
+       Textures.skyTop.bind(gl);
+       gl.glRotated(90,0,1,0);
+       gl.glTranslated(0,0,-0.495);
+       util.drawPlane(1.01, 1.01, 2, 2, gl, glu, glut);
+       gl.glPopMatrix();
+   }
 }

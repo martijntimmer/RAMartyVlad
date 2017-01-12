@@ -26,7 +26,7 @@ public class BezierTrack extends RaceTrack {
         t = t % 1.0;
         Vector tangent = getTangent(t);
         Vector normal = new Vector(tangent.y, -tangent.x, 0);
-        Vector offset = normal.scale(LANE_WIDTH*(lane - (NUM_LANES-1)/2) - 0.5);
+        Vector offset = normal.scale(LANE_WIDTH*(lane - (NUM_LANES-1)/2) - 0.6);
         return getPoint(t).add(offset);
     }
     

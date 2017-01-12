@@ -16,9 +16,11 @@ public class ShaderPrograms {
     public static ShaderProgram terrainShader;
     public static ShaderProgram waterShader;
     public static ShaderProgram leafShader;
+    public static ShaderProgram skyboxShader;
     
     public static void setupShaders(GL2 gl, GLU glu) {
         waterShader = new ShaderProgram(gl, glu, "shaderPrograms/Water/vertex.glsl", null, "shaderPrograms/Water/fragment.glsl");
+        skyboxShader = new ShaderProgram(gl, glu, "shaderPrograms/Skybox/vertex.glsl", null, "shaderPrograms/Skybox/fragment.glsl");
         phongShader =  new ShaderProgram(gl, glu, "shaderPrograms/Default/vertex.glsl", null, "shaderPrograms/Default/fragment.glsl");
         defaultShader = new ShaderProgram(gl, glu, "shaderPrograms/Default/vertex.glsl", null, "shaderPrograms/Default/fragment.glsl");
         //defaultShader.setUniform(gl, "n", 30);

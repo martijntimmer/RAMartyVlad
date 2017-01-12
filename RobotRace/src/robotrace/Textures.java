@@ -12,6 +12,9 @@ public class Textures {
     public static Texture head = null;
     public static Texture torso = null;
     public static Texture[] track = null;   //0=Top, 1=Outer wall, 2=Inner wall of track
+    public static Texture[] skySides = null;   //0=Top, 1=Outer wall, 2=Inner wall of track
+    public static Texture skyTop = null;   //0=Top, 1=Outer wall, 2=Inner wall of track
+    public static Texture skyBot = null;   //0=Top, 1=Outer wall, 2=Inner wall of track
     public static Texture brick = null;
     public static Texture grass = null;
     public static Texture water = null;
@@ -24,6 +27,9 @@ public class Textures {
         torso = loadTexture("textures/torso.jpg");       
         brick = loadTexture("textures/brick.jpg");
         water = loadTexture("textures/water.jpg");
+        skyTop = loadTexture("textures/top.png");
+        skyBot = loadTexture("textures/down.png");
+        skySides = new Texture[] {loadTexture("textures/front.png"),loadTexture("textures/right.png"),loadTexture("textures/back.png"),loadTexture("textures/left.png")};
         track = new Texture[] {loadTexture("textures/track.jpg"), brick, brick };
     }
     
